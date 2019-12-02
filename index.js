@@ -1,21 +1,6 @@
-import { concat, empty } from 'rxjs';
-import { delay, startWith } from 'rxjs/operators';
+import { interval, of, concat } from 'rxjs';
 
-const userMessage = document.getElementById('message');
-
-const delayedMessage = (message, delayedTime = 1000) => {
-  return empty().pipe(
-    startWith(message),
-    // delays the emission of items from the source
-    delay(delayedTime)
-  );
-};
-
-concat(
-  delayedMessage('Get Ready!'),
-  delayedMessage(3, 3000),
-  delayedMessage(2, 3000),
-  delayedMessage(1, 3000),
-  delayedMessage('Go!'),
-  delayedMessage('', 2000)
-).subscribe((message) => (userMessage.innerHTML = message));
+// when source never completes, any subsequent observables never run
+concat(interval(1000), of('This', 'Never', 'Runs'))
+  // log: 1,2,3,4.....
+  .subscribe(console.log);
