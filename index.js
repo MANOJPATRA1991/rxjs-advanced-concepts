@@ -1,6 +1,10 @@
-import { interval, of, concat } from 'rxjs';
+import { map, concatAll } from 'rxjs/operators';
+import { of, interval } from 'rxjs';
 
-// when source never completes, any subsequent observables never run
-concat(interval(1000), of('This', 'Never', 'Runs'))
-  // log: 1,2,3,4.....
-  .subscribe(console.log);
+const source$ = interval(1000);
+const example$ = source$.pipe(
+  map(val => of(val + 10)),
+  concatAll()
+);
+
+const subscribe$ = example$.subscribe(val => console.log("Example with Basic Observable:", val));
