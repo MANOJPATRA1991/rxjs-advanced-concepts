@@ -1,16 +1,17 @@
-import { endWith } from 'rxjs/operators';
+import { endWith, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-const source$ = of('Hello', 'Friend', 'Goodbye');
+const source$ = of('Hello', 'Friend');
 
 /**
  * Hello
  * Friend
  * Goodbye
- * Goodbye
  * Friend
+ * Finally
  */
 source$.pipe(
   // emit on completion
-  endWith('Goodbye', 'Friend')
+  endWith('Goodbye', 'Friend'),
+  finalize(() => console.log('Finally'))
 ).subscribe(console.log);
