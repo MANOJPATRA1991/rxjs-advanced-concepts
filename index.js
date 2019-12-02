@@ -4,11 +4,11 @@ import './style.css';
 // import the fromEvent operator
 import { fromEvent } from 'rxjs';
 
-// grab button reference
+// Grab button reference
 const button = document.getElementById('myButton');
 
-// create an observable of button clicks
+// Create an observable of button clicks
 const myObservable = fromEvent(button, 'click');
 
-// for now, let's just log the event on each click
+// For now, let's just log the event on each click
 const subscription = myObservable.subscribe(event => console.log(event));
