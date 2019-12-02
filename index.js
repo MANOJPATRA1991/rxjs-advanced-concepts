@@ -22,3 +22,7 @@ const newSubscription = myObservable.subscribe({
   // Called once on completion
   complete: () => console.log('complete!')
 });
+
+// Clean up with unsubscribe
+subscription.unsubscribe();
+newSubscription.unsubscribe();
