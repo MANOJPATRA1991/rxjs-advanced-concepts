@@ -1,13 +1,21 @@
-import { of, concat } from 'rxjs';
+import { concat, empty } from 'rxjs';
+import { delay, startWith } from 'rxjs/operators';
 
-const dataSource1$ = of(1, 2, 3);
-const dataSource2$ = of(4, 5, 6);
-const dataSource3$ = of(7, 8, 9);
+const userMessage = document.getElementById('message');
+
+const delayedMessage = (message, delayedTime = 1000) => {
+  return empty().pipe(
+    startWith(message),
+    // delays the emission of items from the source
+    delay(delayedTime)
+  );
+};
 
 concat(
-  dataSource1$,
-  dataSource2$,
-  dataSource3$
-)
-// log: 1, 2, 3, 4, 5, 6, 7, 8, 9
-.subscribe(console.log);
+  delayedMessage('Get Ready!'),
+  delayedMessage(3, 3000),
+  delayedMessage(2, 3000),
+  delayedMessage(1, 3000),
+  delayedMessage('Go!'),
+  delayedMessage('', 2000)
+).subscribe((message) => (userMessage.innerHTML = message));
