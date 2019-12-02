@@ -1,21 +1,24 @@
-import { timer, combineLatest } from 'rxjs';
+import { fromEvent, combineLatest } from 'rxjs';
+import { mapTo, startWith, scan, tap, map } from 'rxjs/operators';
 
-// timerOne emits first value at 1s, then once every 4s
-const timerOne$ = timer(1000, 4000);
-// timerTwo emits first value at 2s, then once every 4s
-const timerTwo$ = timer(2000, 4000);
-// timerThree emits first value at 3s, then once every 4s
-const timerThree$ = timer(3000, 4000);
+// elem refs
+const redTotal = document.getElementById('red-total');
+const blackTotal = document.getElementById('black-total');
+const total = document.getElementById('total');
 
-// when one timer emits, emit the latest values from each timer as an array
-combineLatest(
-  timerOne$, 
-  timerTwo$, 
-  timerThree$,
-  // combineLatest also takes an optional projection function
-  (one, two, three) => {
-    return `Timer One (Proj) Latest: ${one}, 
-              Timer Two (Proj) Latest: ${two}, 
-              Timer Three (Proj) Latest: ${three}`;
+const addOneClick$ = id =>
+  fromEvent(document.getElementById(id), 'click').pipe(
+    // map every click to 1
+    mapTo(1),
+    // keep a running total
+    scan((acc, curr) => acc + curr, 0),
+    startWith(0)
+  );
+
+combineLatest(addOneClick$('red'), addOneClick$('black')).subscribe(
+  ([red, black]) => {
+    redTotal.innerHTML = red;
+    blackTotal.innerHTML = black;
+    total.innerHTML = red + black;
   }
-).subscribe(console.log);
+);
