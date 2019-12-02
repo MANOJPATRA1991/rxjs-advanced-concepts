@@ -1,24 +1,13 @@
-import { fromEvent, combineLatest } from 'rxjs';
-import { mapTo, startWith, scan, tap, map } from 'rxjs/operators';
+import { of, concat } from 'rxjs';
 
-// elem refs
-const redTotal = document.getElementById('red-total');
-const blackTotal = document.getElementById('black-total');
-const total = document.getElementById('total');
+const dataSource1$ = of(1, 2, 3);
+const dataSource2$ = of(4, 5, 6);
+const dataSource3$ = of(7, 8, 9);
 
-const addOneClick$ = id =>
-  fromEvent(document.getElementById(id), 'click').pipe(
-    // map every click to 1
-    mapTo(1),
-    // keep a running total
-    scan((acc, curr) => acc + curr, 0),
-    startWith(0)
-  );
-
-combineLatest(addOneClick$('red'), addOneClick$('black')).subscribe(
-  ([red, black]) => {
-    redTotal.innerHTML = red;
-    blackTotal.innerHTML = black;
-    total.innerHTML = red + black;
-  }
-);
+concat(
+  dataSource1$,
+  dataSource2$,
+  dataSource3$
+)
+// log: 1, 2, 3, 4, 5, 6, 7, 8, 9
+.subscribe(console.log);
