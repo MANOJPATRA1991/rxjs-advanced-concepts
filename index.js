@@ -7,8 +7,10 @@ const source$ = of('Hello', 'Friend', 'Goodbye');
  * Hello
  * Friend
  * Goodbye
+ * Goodbye
  * Friend
  */
 source$.pipe(
-  endWith('Friend')
+  // emit on completion
+  endWith('Goodbye', 'Friend')
 ).subscribe(console.log);
