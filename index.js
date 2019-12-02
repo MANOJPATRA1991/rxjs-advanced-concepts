@@ -1,10 +1,12 @@
 import { map, concatAll } from 'rxjs/operators';
-import { of, interval } from 'rxjs';
+import { interval } from 'rxjs';
 
-const source$ = interval(1000);
+const samplePromise$ = val => new Promise(resolve => resolve(val));
+const source$ = interval(2000);
+
 const example$ = source$.pipe(
-  map(val => of(val + 10)),
+  map(val => samplePromise$(val)),
   concatAll()
 );
 
-const subscribe$ = example$.subscribe(val => console.log("Example with Basic Observable:", val));
+const subscribe$ = example$.subscribe(val => console.log("Example with Promise:", val))
