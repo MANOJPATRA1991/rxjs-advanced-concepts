@@ -1,12 +1,13 @@
-import { map, concatAll } from 'rxjs/operators';
-import { interval } from 'rxjs';
+import { take, concatAll } from 'rxjs/operators';
+import { interval, of } from 'rxjs';
 
-const samplePromise$ = val => new Promise(resolve => resolve(val));
-const source$ = interval(2000);
+const obs1 = interval(1000).pipe(take(5));
+const obs2 = interval(500).pipe(take(2));
+const obs3 = interval(2000).pipe(take(1));
 
-const example$ = source$.pipe(
-  map(val => samplePromise$(val)),
-  concatAll()
-);
+const source$ = of(obs1, obs2, obs3);
 
-const subscribe$ = example$.subscribe(val => console.log("Example with Promise:", val))
+const example$ = source$.pipe(concatAll());
+
+// output: 0,1,2,3,4,0,1,0
+const subscribe$ = example$.subscribe(val => console.log(val));
